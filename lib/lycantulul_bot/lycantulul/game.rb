@@ -772,13 +772,13 @@ module Lycantulul
       when USELESS_VILLAGER
         'Pak Ogah'
       when WEREWOLF
-        'Tulul-Tulul Serigala'
+        'Tulul-tulul Toban'
       when SEER
-        'Tukang Intip'
+        'Detektif'
       when FAUX_SEER
-        'Dukun'
+        'Detektif Gadungan'
       when PROTECTOR
-        'Penjual Jimat'
+        'Penjual Obat Anti Toban'
       when SPY
         'Tamaki Shinichi'
       when NECROMANCER
@@ -788,11 +788,11 @@ module Lycantulul
       when SILVER_BULLET
         'Pengidap Ebola'
       when AMNESTY
-        'Anak Presiden'
+        'Anak Inspektur Jenderal'
       when HOMELESS
         'Gelandangan'
       when SUPER_WEREWOLF
-        'Pinter-Pinter Serigala'
+        'Super Toban'
       when JESTER
         'Biduan'
       end
@@ -801,35 +801,35 @@ module Lycantulul
     def get_task(role)
       case role
       when VILLAGER
-        "Diam menunggu kematian. Seriously. Tapi bisa bantu-bantu yang lain lah sumbang suara buat bunuh para serigala, sekalian berdoa biar dilindungi sama #{self.get_role(PROTECTOR)} kalo ada"
+        "Diam menunggu kematian. Seriously. Tapi bisa bantu-bantu yang lain lah sumbang suara buat bunuh para toban, sekalian berdoa biar dilindungi sama #{self.get_role(PROTECTOR)} kalo ada"
       when GREEDY_VILLAGER
         'Diam menunggu kematian. Tapi saat bertulul dan bermufakat untuk mengeksekusi, bobot suara lu adalah 3'
       when USELESS_VILLAGER
         'Diam menunggu kematian. Seriously kenapa lu harus ada sih? Bahkan saat voting eksekusi suara lu ga dianggep. Cian. Tiaja'
       when WEREWOLF
-        "BUNUH, BUNUH, BUNUH\n\nSetiap malam, bakal ditanya mau bunuh siapa (oiya, kalo misalnya ada serigala yang lain, kalian harus berunding soalnya ntar voting, kalo ga ada suara mayoritas siapa yang mau dibunuh, ga ada yang mati, ntar gua kasih tau kok pas gua tanyain)\n\nHati-hati, bisa jadi ada #{self.get_role(SILVER_BULLET)} di antara para warga kampung, kalo bunuh dia, 1 ekor serigala akan ikut mati"
+        "BUNUH, BUNUH, BUNUH\n\nSetiap malam, bakal ditanya mau bunuh siapa (oiya, kalo misalnya ada toban yang lain, kalian harus berunding soalnya ntar voting, kalo ga ada suara mayoritas siapa yang mau dibunuh, ga ada yang mati, ntar gua kasih tau kok pas gua tanyain)\n\nHati-hati, bisa jadi ada #{self.get_role(SILVER_BULLET)} di antara para warga kampung, kalo bunuh dia, 1 ekor toban akan ikut mati"
       when SEER
-        'Bantuin kemenangan para rakyat jelata dengan ngintipin ke rumah orang-orang. Pas ngintip ntar bisa tau mereka siapa sebenarnya. Tapi kalo misalnya yang mau diintip (atau elunya sendiri) mati dibunuh serigala, jadi gatau dia siapa sebenarnya :\'( hidup memang keras'
+        'Bantuin kemenangan para rakyat jelata dengan ngintipin ke rumah orang-orang. Pas ngintip ntar bisa tau mereka siapa sebenarnya. Tapi kalo misalnya yang mau diintip (atau elunya sendiri) mati dibunuh toban, jadi gatau dia siapa sebenarnya :\'( hidup memang keras'
       when FAUX_SEER
         'Bantuin kemenangan para rakyat jelata, di mana setiap malam lu bakal dikasih tau peran salah seorang pemain yang masih hidup secara random (ga jamin sih besoknya dikasih tau orang yang berbeda apa engga hahaha)'
       when PROTECTOR
-        'Jualin jimat ke orang-orang. Orang yang dapet jimat akan terlindungi dari serangan para serigala. Ntar tiap malem ditanyain mau jual ke siapa (sebenernya ga jualan juga sih, ga dapet duit, maap yak). Hati-hati loh tapi, kalo lu jual jimat ke serigala bisa-bisa lu dibunuh dengan 25% kemungkinan, kecil lah, peluang lu buat dapet pasangan hidup masih lebih gede :)'
+        'Ngasih obat anti toban ke orang-orang. Orang yang dapet obat anti toban akan terlindungi dari serangan para toban. Ntar tiap malem ditanyain mau jual ke siapa (sebenernya ga jualan juga sih, ga dapet duit, maap yak). Hati-hati loh tapi, kalo lu jual obat anti toban ke toban bisa-bisa lu dibunuh dengan 25% kemungkinan, kecil lah, peluang lu buat dapet pasangan hidup masih lebih gede :)'
       when SPY
-        'Tiap malem dikasih tau para serigala mau bunuh siapa. Terserah itu info mau lu apain'
+        'Tiap malem dikasih tau para toban mau bunuh siapa. Terserah itu info mau lu apain'
       when NECROMANCER
-        'Menghidupkan kembali 1 orang mayat. Sebagai gantinya, lu yang bakal mati. Ingat, cuma ada 1 kesempatan! Dan jangan sampe lu malah dibunuh duluan sama serigala. Allaaaaahuakbar!'
+        'Menghidupkan kembali 1 orang mayat. Sebagai gantinya, lu yang bakal mati. Ingat, cuma ada 1 kesempatan! Dan jangan sampe lu malah dibunuh duluan sama toban. Allaaaaahuakbar!'
       when SUPER_NECROMANCER
         "Menghidupkan kembali 1 orang mayat. Karena lu #{self.get_role(NECROMANCER)} versi super, setelah menghidupkan seseorang, lu akan tetap hidup, tapi cuma ada 1 kesempatan ngidupin orang. Tenang, peran lu ga bakal dikasih tau ke siapa-siapa, hanya lu dan Allah yang tahu. Allaaaaahuakbar!"
       when SILVER_BULLET
-        'Diam menunggu kematian. Tapi, kalo lu dibunuh serigala, 1 ekor serigalanya ikutan mati. Aduh itu kenapa penyakit lu ga dikarantina aja sih'
+        'Diam menunggu kematian. Tapi, kalo lu dibunuh toban, 1 ekor tobannya ikutan mati. Aduh itu kenapa penyakit lu ga dikarantina aja sih'
       when AMNESTY
-        'Diam menunggu kematian. Tapi, kalo lu dieksekusi oleh warga, lu bakal selamat (tapi cuma bisa sekali itu aja). Tiati aja sih malam berikutnya dibunuh serigala'
+        'Diam menunggu kematian. Tapi, kalo lu dieksekusi oleh warga, lu bakal selamat (tapi cuma bisa sekali itu aja). Tiati aja sih malam berikutnya dibunuh toban'
       when HOMELESS
-        'Nebeng ke rumah orang lain tiap malem, jadi lu selalu aman dari serangan serigala. Tapi kalo orang yang lu tebengi dibunuh serigala atau malah serigala itu sendiri, lu ikutan mati. Tapi lu jago ngumpet juga sih, kalo serigala ngincer lu dan lu nebeng di serigala lu tetep aman.'
+        'Nebeng ke rumah orang lain tiap malem, jadi lu selalu aman dari serangan toban. Tapi kalo orang yang lu tebengi dibunuh toban atau malah toban itu sendiri, lu ikutan mati. Tapi lu jago ngumpet juga sih, kalo toban ngincer lu dan lu nebeng di toban lu tetep aman.'
       when SUPER_WEREWOLF
-        "#{self.get_task(WEREWOLF)}\n\nBedanya lu dengan serigala tulul adalah:\n- Lu ga bakal terjangkit kalo ngebunuh #{self.get_role(SILVER_BULLET)}\n- Siapa yang mau lu bunuh ga bakal ketahuan sama #{self.get_role(SPY)}\n- Kalo ada beberapa serigala, suara lu buat voting ngebunuh siapa diitung 2\n- #{self.get_role(SEER)} dan #{self.get_role(FAUX_SEER)} bakal liat lu sebagai #{self.get_role(VILLAGER)}\n- Kalo dijualin jimat sama #{self.get_role(PROTECTOR)}, dia pasti mati"
+        "#{self.get_task(WEREWOLF)}\n\nBedanya lu dengan toban tulul adalah:\n- Lu ga bakal terjangkit kalo ngebunuh #{self.get_role(SILVER_BULLET)}\n- Siapa yang mau lu bunuh ga bakal ketahuan sama #{self.get_role(SPY)}\n- Kalo ada beberapa toban, suara lu buat voting ngebunuh siapa diitung 2\n- #{self.get_role(SEER)} dan #{self.get_role(FAUX_SEER)} bakal liat lu sebagai #{self.get_role(VILLAGER)}\n- Kalo dijualin obat anti toban sama #{self.get_role(PROTECTOR)}, dia pasti mati"
       when JESTER
-        "Diam menunggu kematian sambil joget-joget, jadi kalo lu dibunuh serigala, lu ga mati. Cuma punya #{JESTER_LIMIT} kesempatan, abis itu kalo dibunuh lagi ya mati soalnya udah trauma joget-joget"
+        "Diam menunggu kematian sambil joget-joget, jadi kalo lu dibunuh toban, lu ga mati. Cuma punya #{JESTER_LIMIT} kesempatan, abis itu kalo dibunuh lagi ya mati soalnya udah trauma joget-joget"
       end
     end
 

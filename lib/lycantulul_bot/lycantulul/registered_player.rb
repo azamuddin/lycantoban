@@ -93,7 +93,7 @@ module Lycantulul
       res += "\n"
       res += "Jumlah dieksekusi <b>#{self.executed}</b>\n"
       res += "Hari pertama <b>#{self.executed_first_day}</b>\n"
-      res += "Dilindungi presiden <b>#{self.executed_under_protection}</b>\n"
+      res += "Dilindungi inspektur jenderal <b>#{self.executed_under_protection}</b>\n"
       res += "\n"
       res += "Diidupin mujahid <b>#{self.revived}</b>\n"
       res += "\n"

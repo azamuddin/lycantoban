@@ -43,7 +43,7 @@ Demi fleksibilitas dalam bermain, bot ini menyediakan pilihan untuk mengubah pen
 1. Pak Ogah
    - Dibunuh dan ikut voting eksekusi.
    - Saat voting, bobot suaranya 0.
-1. Anak Presiden
+1. Anak Inspektur Jenderal
    - Dibunuh dan ikut voting eksekusi.
    - Tidak akan mati saat dieksekusi pertama kali.
 1. Dukun
@@ -99,7 +99,7 @@ Demi fleksibilitas dalam bermain, bot ini menyediakan pilihan untuk mengubah pen
 1. Pak Raden: muncul saat jumlah pemain 11 orang
 1. Mujahid: muncul saat jumlah pemain 12 orang
 1. Dukun: muncul saat jumlah pemain 14 orang
-1. Anak Presiden: muncul saat jumlah pemain 15 orang
+1. Anak Inspektur Jenderal: muncul saat jumlah pemain 15 orang
 1. Tamaki Shinichi: muncul saat jumlah pemain 16 orang
 1. Gelandangan: muncul saat jumlah pemain 16 orang
 1. Super Mujahid: muncul saat jumlah pemain 18 orang

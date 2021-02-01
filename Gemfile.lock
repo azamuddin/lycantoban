@@ -43,7 +43,7 @@ GEM
       mongoid-compatibility
     multipart-post (2.0.0)
     origin (2.2.0)
-    rake (11.1.2)
+    rake (12.3.3)
     redis (3.2.2)
     sucker_punch (2.0.1)
       concurrent-ruby (~> 1.0.0)

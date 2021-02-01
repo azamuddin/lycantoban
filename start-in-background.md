@@ -4,6 +4,8 @@
 
 # to get list of running
 
-`jobs -l`
+`jobs -l` 
+
+atau jika diatas tidak berfungsi, `ps xw` cari rake nya lycantulul, ambil PID nya trus `kill -9 PID`
 
 

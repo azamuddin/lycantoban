@@ -5,10 +5,10 @@ module Lycantulul
     attr_accessor :bot
 
     MINIMUM_PLAYER = -> { (res = $redis.get('lycantulul::minimum_player')) ? res.to_i : 5 }
-    NIGHT_TIME = -> { (res = $redis.get('lycantulul::night_time')) ? res.to_i : 90 }
+    NIGHT_TIME = -> { (res = $redis.get('lycantulul::night_time')) ? res.to_i : 75 }
     # multiply of 8 please
-    VOTING_TIME = -> { (res = $redis.get('lycantulul::voting_time')) ? res.to_i : 160 }
-    DISCUSSION_TIME = -> { (res = $redis.get('lycantulul::discussion_time')) ? res.to_i : 120 }
+    VOTING_TIME = -> { (res = $redis.get('lycantulul::voting_time')) ? res.to_i : 75 }
+    DISCUSSION_TIME = -> { (res = $redis.get('lycantulul::discussion_time')) ? res.to_i : 60 }
 
     ALLOWED_DELAY = -> { (res = $redis.get('lycantulul::allowed_delay')) ? res.to_i : 20 }
 
@@ -672,6 +672,7 @@ module Lycantulul
         else
           log("voting succeeded, resulting in #{votee.full_name}'s death")
           send_to_player(votee.user_id, 'MPOZ LO DIEKSEKUSI')
+          #send_to_player(group_chat_id, "#{voting_result}\nMPOZ MPOZ MPOZ\n\nTernyata dia itu #{game.get_role(votee.role)}", parse_mode: 'HTML')
           send_to_player(group_chat_id, "#{voting_result}\nMPOZ MPOZ MPOZ\n\nTernyata dia itu #{game.get_role(votee.role)}", parse_mode: 'HTML')
         end
         return if check_win(game)

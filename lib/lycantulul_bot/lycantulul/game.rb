@@ -715,7 +715,8 @@ module Lycantulul
       if ded_count > 0
         res += "\n\n"
         res += "Udah mati: <b>#{ded_count} makhluk</b>\n"
-        res += (self.dead_players).map{ |lp| "- #{lp.full_name} - <i>#{self.get_role(lp.role)}</i>" }.sort.join("\n")
+        #res += (self.dead_players).map{ |lp| "- #{lp.full_name} - <i>#{self.get_role(lp.role)}</i>" }.sort.join("\n")
+        res += (self.dead_players).map{ |lp| "- #{lp.full_name} <i></i>" }.sort.join("\n")
       end
 
       if self.waiting?

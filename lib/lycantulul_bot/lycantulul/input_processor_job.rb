@@ -39,25 +39,25 @@ module Lycantulul
 
       if MAINTENANCE.call
         reply = in_group?(message)
-        if !reply || message.text =~ /@lycanserigala(dev_)?bot/
+        if !reply || message.text =~ /@lycantoban(dev_)?bot/
           $redis.rpush('lycantulul::maintenance_info', message.chat.id)
           send(message, 'Lagi bermain tenis bersama Ecchi-men Ryoman dan Nopak Jokowi', reply: reply)
         end
       elsif player_invalid?(message)
         reply = in_group?(message)
-        if !reply || message.text =~ /@lycanserigala(dev_)?bot/
+        if !reply || message.text =~ /@lycantoban(dev_)?bot/
           send(message, 'Namanya jangan alay pake karakter-karakter aneh dong :( Ganti dulu!', reply: reply)
         end
       else
         if Time.now.to_i - message.date < ALLOWED_DELAY.call
           if new_member = message.new_chat_member
-            if new_member.username =~ /bot$/i && message.chat&.username =~ /lycanserigala/i
+            if new_member.username =~ /bot$/i && message.chat&.username =~ /lycantoban/i
               unless new_member.username == 'tulul_stats_bot'
                 @bot.api.kick_chat_member(chat_id: '@lycantulul', user_id: new_member.id) rescue nil
               end
-            elsif !Lycantulul::RegisteredPlayer.get(new_member.id) && !new_member.username == 'lycanserigala_bot'
+            elsif !Lycantulul::RegisteredPlayer.get(new_member.id) && !new_member.username == 'lycantoban_bot'
               name = new_member.username ? "@#{new_member.username}" : new_member.first_name
-              send(message, "Welcome #{name}. PM aku @lycanserigala terus /start yaa~", reply: true)
+              send(message, "Welcome #{name}. PM aku @lycantoban terus /start yaa~", reply: true)
             end
           elsif left_member = message.left_chat_member
             if game = check_game(message)
@@ -66,7 +66,7 @@ module Lycantulul
           end
 
           case message.text
-          when /^\/start(@lycanserigala_bot)?/
+          when /^\/start(@lycantoban_bot)?/
             if in_private?(message)
               if check_player(message)
                 send(message, 'Udah kedaftar!')
@@ -77,15 +77,15 @@ module Lycantulul
             else
               start_new_game(message)
             end
-          when /^\/help(@lycanserigala_bot)?/
+          when /^\/help(@lycantoban_bot)?/
             send(message, bot_help)
-          when /^\/bikin_baru(@lycanserigala_bot)?/
+          when /^\/bikin_baru(@lycantoban_bot)?/
             if in_group?(message)
               start_new_game(message)
             else
               wrong_room(message)
             end
-          when /^\/batalin(@lycanserigala_bot)?/
+          when /^\/batalin(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 if game.waiting?
@@ -104,7 +104,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/ikutan(@lycanserigala_bot)?/
+          when /^\/ikutan(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 if check_player(message)
@@ -131,7 +131,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/gajadi(@lycanserigala_bot)?/
+          when /^\/gajadi(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 if check_player(message)
@@ -166,7 +166,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/ganti_settingan_peran(@lycanserigala_bot)?/
+          when /^\/ganti_settingan_peran(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 if game.waiting?
@@ -186,7 +186,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/batal_nyetting_peran(@lycanserigala_bot)?/
+          when /^\/batal_nyetting_peran(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 if game.waiting?
@@ -205,7 +205,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/apus_settingan_peran(@lycanserigala_bot)?/
+          when /^\/apus_settingan_peran(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 if game.waiting?
@@ -224,7 +224,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/ganti_settingan_voting(@lycanserigala_bot)?/
+          when /^\/ganti_settingan_voting(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 if game.waiting?
@@ -239,7 +239,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/mulai_main(@lycanserigala_bot)?/
+          when /^\/mulai_main(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 if game.waiting?
@@ -268,7 +268,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/siapa_aja(@lycanserigala_bot)?/
+          when /^\/siapa_aja(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 if (Time.now - game.last_player_list_query rescue 11).ceil > 10
@@ -280,7 +280,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/hasil_voting(@lycanserigala_bot)?/
+          when /^\/hasil_voting(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 unless game.waiting?
@@ -300,7 +300,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/panggil_semua(@lycanserigala_bot)?/
+          when /^\/panggil_semua(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 summon(game, :all)
@@ -310,7 +310,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/panggil_yang_idup(@lycanserigala_bot)?/
+          when /^\/panggil_yang_idup(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 summon(game, :alive)
@@ -320,7 +320,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/panggil_yang_belom_voting(@lycanserigala_bot)?/
+          when /^\/panggil_yang_belom_voting(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
                 unless game.waiting?
@@ -338,7 +338,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/ganti_settingan_waktu(@lycanserigala_bot)?/
+          when /^\/ganti_settingan_waktu(@lycantoban_bot)?/
             if in_group?(message)
               if group = Lycantulul::Group.get(message)
                 if !group.pending_time_id
@@ -352,7 +352,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/batal_nyetting_waktu(@lycanserigala_bot)?/
+          when /^\/batal_nyetting_waktu(@lycantoban_bot)?/
             if in_group?(message)
               if group = Lycantulul::Group.get(message)
                 if group.pending_time_id
@@ -365,10 +365,10 @@ module Lycantulul
             else
               wrong_room(message)
             end
-          when /^\/ilangin_keyboard(@lycanserigala_bot)?/
+          when /^\/ilangin_keyboard(@lycantoban_bot)?/
             keyboard = Telegram::Bot::Types::ReplyKeyboardHide.new(hide_keyboard: true, selective: true)
             send(message, 'OK', reply: in_group?(message), keyboard: keyboard)
-          when /^\/statistik(@lycanserigala_bot)?/
+          when /^\/statistik(@lycantoban_bot)?/
             if in_private?(message)
               if check_player(message)
                 send_to_player(message.chat.id, Lycantulul::RegisteredPlayer.get(message.from.id).statistics, parse_mode: 'HTML')
@@ -667,7 +667,8 @@ module Lycantulul
         if amnestied
           log("voting amnestied, resulting in #{votee.full_name}'s survival")
           send_to_player(votee.user_id, 'CIYEEE ANAK INSPEKTUR JENDERAL SELAMET YEE GA JADI MATI')
-          send_to_player(group_chat_id, "#{voting_result}\nNamun ternyata dia itu #{game.get_role(votee.role)}, selamatlah dia dari eksekusi kali ini", parse_mode: 'HTML')
+          #send_to_player(group_chat_id, "#{voting_result}\nNamun ternyata dia itu #{game.get_role(votee.role)}, selamatlah dia dari eksekusi kali ini", parse_mode: 'HTML')
+          send_to_player(group_chat_id, "#{voting_result}\nNamun ternyata dia itu (rahasia), selamatlah dia dari eksekusi kali ini", parse_mode: 'HTML')
         else
           log("voting succeeded, resulting in #{votee.full_name}'s death")
           send_to_player(votee.user_id, 'MPOZ LO DIEKSEKUSI')
@@ -845,7 +846,7 @@ module Lycantulul
       if in_private?(message)
         send(message, 'Di grup doang tjoy ini bisanya')
       elsif in_group?(message)
-        send(message, 'PM mz mb! @lycanserigala_bot', reply: true)
+        send(message, 'PM mz mb! @lycantoban_bot', reply: true)
       end
     end
 
@@ -884,7 +885,7 @@ module Lycantulul
     end
 
     def unregistered(message)
-      send(message, 'Belom terdaftar (atau lu nge-block gua) cuy. PM gua @lycanserigala_bot terus /start (jangan lupa unblock dulu), baru balik sini dan lakukan lagi apa yang mau lu lakukan tadi', reply: true)
+      send(message, 'Belom terdaftar (atau lu nge-block gua) cuy. PM gua @lycantoban_bot terus /start (jangan lupa unblock dulu), baru balik sini dan lakukan lagi apa yang mau lu lakukan tadi', reply: true)
     end
 
     def bot_help
@@ -1065,7 +1066,7 @@ module Lycantulul
         win = true
       elsif game.living_werewolves.count + game.living_super_werewolves.count >= game.killables.count
         log('villagers ded')
-        ending += 'Dan permainan pun berakhir karena serigala telah memenangkan permainan. Semoga mereka terkutuk seumur hidup.'
+        ending += 'Dan permainan pun berakhir karena serigala telah memenangkan permainan. Semoga mereka segera bertaubat.'
         win = true
       end
 

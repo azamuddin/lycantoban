@@ -611,11 +611,13 @@ module Lycantulul
 
         log("#{victim_full_name} is killed by werewolves")
         send_to_player(victim_chat_id, 'MPOZ LO MATEK')
-        send_to_player(group_chat_id, "GILS GILS GILS\nserigala berhasil memakan si #{victim_full_name}\nMPOZ MPOZ MPOZ\n\nTernyata dia itu #{victim_role}")
+        #send_to_player(group_chat_id, "GILS GILS GILS\nserigala berhasil memakan si #{victim_full_name}\nMPOZ MPOZ MPOZ\n\nTernyata dia itu #{victim_role}")
+        send_to_player(group_chat_id, "GILS GILS GILS\nserigala berhasil memakan si #{victim_full_name}\nMPOZ MPOZ MPOZ\n\nTernyata dia itu (Rahasia)")
 
         if dead_werewolf
-          send_to_player(dead_werewolf.user_id, "MPOZ. Sial kan bunuh #{game.get_role(Lycantulul::Game::SILVER_BULLET)}, lu ikutan terjangkit. Mati deh")
-          send_to_player(group_chat_id, "#{victim_full_name} yang ternyata mengidap ebola ikut menjangkiti seekor serigala #{dead_werewolf.full_name} yang pada akhirnya meninggal dunia. Mari berantas ebola dari muka bumi ini secepatnya!")
+          send_to_player(dead_werewolf.user_id, "MPOZ. Sial kan bunuh #{game.get_role(Lycantulul::Game::SILVER_BULLET)}, lu dipukuli berkali-kali sama petarung, Mati bareng deh")
+          #send_to_player(group_chat_id, "#{victim_full_name} yang ternyata mengidap ebola ikut menjangkiti seekor serigala #{dead_werewolf.full_name} yang pada akhirnya meninggal dunia. Mari berantas ebola dari muka bumi ini secepatnya!")
+          send_to_player(group_chat_id, "#{victim_full_name} yang ternyata adalah petarung handal, sebelum dibunuh bertarung dengan serigala, sehingga seekor serigala #{dead_werewolf.full_name} yang pada akhirnya meninggal dunia juga karena dipukuli berkali-kali. Mari berlatih bela diri agar bisa bertarung melawan serigala.
         end
 
         unless dead_homeless.empty?
@@ -667,12 +669,10 @@ module Lycantulul
         if amnestied
           log("voting amnestied, resulting in #{votee.full_name}'s survival")
           send_to_player(votee.user_id, 'CIYEEE ANAK INSPEKTUR JENDERAL SELAMET YEE GA JADI MATI')
-          #send_to_player(group_chat_id, "#{voting_result}\nNamun ternyata dia itu #{game.get_role(votee.role)}, selamatlah dia dari eksekusi kali ini", parse_mode: 'HTML')
-          send_to_player(group_chat_id, "#{voting_result}\nNamun ternyata dia itu (rahasia), selamatlah dia dari eksekusi kali ini", parse_mode: 'HTML')
+          send_to_player(group_chat_id, "#{voting_result}\nNamun ternyata dia itu #{game.get_role(votee.role)}, selamatlah dia dari eksekusi kali ini", parse_mode: 'HTML')
         else
           log("voting succeeded, resulting in #{votee.full_name}'s death")
           send_to_player(votee.user_id, 'MPOZ LO DIEKSEKUSI')
-          #send_to_player(group_chat_id, "#{voting_result}\nMPOZ MPOZ MPOZ\n\nTernyata dia itu #{game.get_role(votee.role)}", parse_mode: 'HTML')
           send_to_player(group_chat_id, "#{voting_result}\nMPOZ MPOZ MPOZ\n\nTernyata dia itu #{game.get_role(votee.role)}", parse_mode: 'HTML')
         end
         return if check_win(game)
@@ -691,7 +691,7 @@ module Lycantulul
           seer_id = seen[2]
 
           log("sending #{seen_full_name}'s role #{seen_role} to seer: #{seer_id}")
-          send_to_player(seer_id, "Dengan kekuatan maksiat, peran si #{seen_full_name} pun terlihat: #{seen_role}")
+          send_to_player(seer_id, "Dengan kekuatan ibadah, peran si #{seen_full_name} pun terlihat: #{seen_role}")
         end
       when DEAD_PROTECTORS
         aux.each do |dp|
@@ -708,10 +708,10 @@ module Lycantulul
           necromancee = nc[1]
 
           log("sending necromancing messages to necromancer #{necromancer.full_name} and the raised #{necromancee.full_name}")
-          send_to_player(necromancee.user_id, "Kamu telah dihidupkan kembali oleh seorang mujahid! Selamat datang kembali!")
-          send_to_player(necromancer.user_id, "Kamu berhasil menghidupkan kembali #{necromancee.full_name}. Terima kasih, terima kasih, terima kasih. Kamu memang makhluk paling keren di muka bumi ini :*")
+          send_to_player(necromancee.user_id, "Ingatanmu telah diambil oleh Profesor dan dimasukan ke dalam robot menggunakan NeuraLink dari Elon Musk dan bisa ikut lagi, Selamat datang kembali!")
+          send_to_player(necromancer.user_id, "Kamu berhasil membuat robot dari ingatan #{necromancee.full_name}. Terima kasih, terima kasih, terima kasih. Kamu memang makhluk paling keren di muka bumi ini :*")
 
-          end_message = " menghidupkan #{necromancee.full_name}, seorang #{game.get_role(necromancee.role)}. Ayo manfaatkan kesempatan ini sebaik mungkin!"
+          end_message = " membuat robot dengan ingatan dari #{necromancee.full_name}, seorang #{game.get_role(necromancee.role)}. Ayo manfaatkan kesempatan ini sebaik mungkin!"
           case necromancer.role
           when Lycantulul::Game::NECROMANCER
             send_to_player(game.group_id, "#{necromancer.full_name} sang #{game.get_role(necromancer.role)} berhasil mengorbankan dirinya untuk" + end_message)
@@ -812,7 +812,7 @@ module Lycantulul
       log("sending protector instruction to #{protector_full_name}")
       options = convert_to_square_keyboard(living_players.map{ |lv| lv[:full_name] } - [protector_full_name])
       vote_keyboard = Telegram::Bot::Types::ReplyKeyboardMarkup.new(keyboard: options, resize_keyboard: true, one_time_keyboard: true)
-      send_to_player(protector_chat_id, 'Mau jual obat anti serigala ke siapa?', reply_markup: vote_keyboard)
+      send_to_player(protector_chat_id, 'Mau jual vaksin anti serigala ke siapa?', reply_markup: vote_keyboard)
     end
 
     def send_necromancer(dead_players, necromancer_chat_id)

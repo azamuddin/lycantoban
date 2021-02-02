@@ -703,7 +703,7 @@ module Lycantulul
       sorted_roles = IMPORTANT_ROLES.sort_by{ |role| self.get_role(self.class.const_get(role.upcase)) }
       sorted_roles.each do |role|
         count = self.send("living_#{role.pluralize}").count
-        count > 0 && res += "<i>#{count} #{self.get_role(self.class.const_get(role.upcase))}</i>\n"
+        #count > 0 && res += "<i>#{count} #{self.get_role(self.class.const_get(role.upcase))}</i>\n"
       end
 
       if self.finished
@@ -713,10 +713,19 @@ module Lycantulul
       end
 
       if ded_count > 0
-        res += "\n\n"
-        res += "Udah mati: <b>#{ded_count} makhluk</b>\n"
-        #res += (self.dead_players).map{ |lp| "- #{lp.full_name} - <i>#{self.get_role(lp.role)}</i>" }.sort.join("\n")
-        res += (self.dead_players).map{ |lp| "- #{lp.full_name} <i></i>" }.sort.join("\n")
+
+        if self.finished 
+          res += "\n\n"
+          res += "Udah mati: <b>#{ded_count} makhluk</b>\n"
+          res += (self.dead_players).map{ |lp| "- #{lp.full_name} - <i>#{self.get_role(lp.role)}</i>" }.sort.join("\n")
+          #res += (self.dead_players).map{ |lp| "- #{lp.full_name} <i></i>" }.sort.join("\n")
+        else 
+          res += "\n\n"
+          res += "Udah mati: <b>#{ded_count} makhluk</b>\n"
+          #res += (self.dead_players).map{ |lp| "- #{lp.full_name} - <i>#{self.get_role(lp.role)}</i>" }.sort.join("\n")
+          res += (self.dead_players).map{ |lp| "- #{lp.full_name} <i></i>" }.sort.join("\n")
+        end 
+
       end
 
       if self.waiting?
@@ -783,11 +792,11 @@ module Lycantulul
       when SPY
         'Tamaki Shinichi'
       when NECROMANCER
-        'Mujahid'
+        'Profesor'
       when SUPER_NECROMANCER
         "Super #{self.get_role(NECROMANCER)}"
       when SILVER_BULLET
-        'Pengidap Ebola'
+        'Petarung'
       when AMNESTY
         'Anak Inspektur Jenderal'
       when HOMELESS
@@ -808,7 +817,7 @@ module Lycantulul
       when USELESS_VILLAGER
         'Diam menunggu kematian. Seriously kenapa lu harus ada sih? Bahkan saat voting eksekusi suara lu ga dianggep. Cian. Tiaja'
       when WEREWOLF
-        "BUNUH, BUNUH, BUNUH\n\nSetiap malam, bakal ditanya mau bunuh siapa (oiya, kalo misalnya ada serigala yang lain, kalian harus berunding soalnya ntar voting, kalo ga ada suara mayoritas siapa yang mau dibunuh, ga ada yang mati, ntar gua kasih tau kok pas gua tanyain)\n\nHati-hati, bisa jadi ada #{self.get_role(SILVER_BULLET)} di antara para warga kampung, kalo bunuh dia, 1 ekor serigala akan ikut mati"
+        "BUNUH, BUNUH, BUNUH\n\nSetiap malam, bakal ditanya mau bunuh siapa (oiya, kalo misalnya ada serigala yang lain, kalian harus berunding soalnya ntar voting, kalo ga ada suara mayoritas siapa yang mau dibunuh, ga ada yang mati, ntar gua kasih tau kok pas gua tanyain)\n\nHati-hati, bisa jadi ada #{self.get_role(SILVER_BULLET)} di antara para warga kampung, kalo bunuh dia, 1 ekor serigala akan ikut mati dipukuli"
       when SEER
         'Bantuin kemenangan para rakyat jelata dengan ngintipin ke rumah orang-orang. Pas ngintip ntar bisa tau mereka siapa sebenarnya. Tapi kalo misalnya yang mau diintip (atau elunya sendiri) mati dibunuh serigala, jadi gatau dia siapa sebenarnya :\'( hidup memang keras'
       when FAUX_SEER
@@ -818,11 +827,11 @@ module Lycantulul
       when SPY
         'Tiap malem dikasih tau para serigala mau bunuh siapa. Terserah itu info mau lu apain'
       when NECROMANCER
-        'Menghidupkan kembali 1 orang mayat. Sebagai gantinya, lu yang bakal mati. Ingat, cuma ada 1 kesempatan! Dan jangan sampe lu malah dibunuh duluan sama serigala. Allaaaaahuakbar!'
+        'Mengambil memory orang yang meninggal dan bikin robotnya. Sebagai gantinya, lu yang bakal mati. Ingat, cuma ada 1 kesempatan! Dan jangan sampe lu malah dibunuh duluan sama serigala. Allaaaaahuakbar!'
       when SUPER_NECROMANCER
-        "Menghidupkan kembali 1 orang mayat. Karena lu #{self.get_role(NECROMANCER)} versi super, setelah menghidupkan seseorang, lu akan tetap hidup, tapi cuma ada 1 kesempatan ngidupin orang. Tenang, peran lu ga bakal dikasih tau ke siapa-siapa, hanya lu dan Allah yang tahu. Allaaaaahuakbar!"
+        "Mengambil memory orang yang meninggal dan bikin robotnya. Karena lu #{self.get_role(NECROMANCER)} versi super, setelah membuat robot, lu akan tetap hidup, tapi cuma ada 1 kesempatan membuat robot dari orang mati. Tenang, peran lu ga bakal dikasih tau ke siapa-siapa, hanya lu dan Allah yang tahu."
       when SILVER_BULLET
-        'Diam menunggu kematian. Tapi, kalo lu dibunuh serigala, 1 ekor serigalanya ikutan mati. Aduh itu kenapa penyakit lu ga dikarantina aja sih'
+        'Diam menunggu kematian. Tapi, kalo lu mau dibunuh serigala, lu bakal berantem dan memukuli itu serigala ampe sama-sama mati.'
       when AMNESTY
         'Diam menunggu kematian. Tapi, kalo lu dieksekusi oleh warga, lu bakal selamat (tapi cuma bisa sekali itu aja). Tiati aja sih malam berikutnya dibunuh serigala'
       when HOMELESS

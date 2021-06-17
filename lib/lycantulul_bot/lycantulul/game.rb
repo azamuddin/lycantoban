@@ -23,6 +23,7 @@ module Lycantulul
     field :group_id, type: Integer
     field :round, type: Integer, default: 0
     field :creator_id, type: Integer
+    field :roumoree_id, type: Integer
 
     field :waiting, type: Boolean, default: true
     field :night, type: Boolean, default: true
@@ -411,11 +412,22 @@ module Lycantulul
       end
     end
 
+    def pick_roumoree
+      LycantululBot.log("pick rumoree")
+      roumoree = self.living_players.sample
+      LycantululBot.log("rumoree id is "+ roumoree.user_id.to_s)
+
+      self.update_attribute(:roumoree_id, roumoree.user_id)
+
+    end 
+
     def next_round
       self.with_lock(wait: true) do
         self.inc(round: 1)
+        self.pick_roumoree
       end
     end
+
 
     def assign(role)
       # https://gist.github.com/O-I/3e0654509dd8057b539a

@@ -1,3 +1,5 @@
+require 'ostruct' 
+
 module Lycantulul
   class InputProcessorJob
     include SuckerPunch::Job
@@ -11,6 +13,25 @@ module Lycantulul
     DISCUSSION_TIME = -> { (res = $redis.get('lycantulul::discussion_time')) ? res.to_i : 60 }
 
     ALLOWED_DELAY = -> { (res = $redis.get('lycantulul::allowed_delay')) ? res.to_i : 20 }
+    
+    ALL_PLAYERS_USERNAME = [
+      'azamuddin91',
+      'bang_chad',
+      't_danar_p',
+      'Aku_apa_adanya',
+      'aerbee',
+      'akhmadaksanul',
+      'fawzaniqbal',
+      'deamagno',
+      'adilukmanul',
+      'Nataanita',
+      'Imamkoto',
+      'gyceeel', 
+      'elgptr', 
+      'Miftahbs',
+      'Ninafadila', 
+      'satwikafadil' 
+    ]
 
     MAINTENANCE = -> { $redis.get('lycantulul::maintenance').to_i == 1 rescue nil }
     MAINTENANCE_PREVENT = -> { $redis.get('lycantulul::maintenance_prevent').to_i == 1 rescue nil }
@@ -104,6 +125,59 @@ module Lycantulul
             else
               wrong_room(message)
             end
+
+          when /^\/test/ 
+            log(message.from.to_s)
+            return unless message.from.username == "azamuddin91" 
+            username = message.text.split[1]&.to_s
+
+            test_text = "@azamuddin91"
+            test_text = test_text.gsub(/@/, "")
+            send(message, test_text)
+
+
+          when /^\/jorokin/ 
+            if in_group?(message)
+              if game = check_game(message)
+                username = message.text.split[1]&.to_s
+                username = username.gsub(/@/, "")
+                if rp = Lycantulul::RegisteredPlayer.find_by(username: username)
+                  unless game.duplicate_name?(rp)
+                    player_dijorokin = OpenStruct.new 
+                    player_dijorokin.username = rp.username
+                    player_dijorokin.first_name = rp.first_name 
+                    player_dijorokin.last_name = rp.last_name 
+                    player_dijorokin.id = rp.user_id
+
+                    game.add_player(player_dijorokin)
+                    send(message, 'Oke @' + username + ' sudah dijorokin ke permainan')
+                  else 
+                    send(message, 'Si @' + username + ' udah /ikutan tjoy')
+                  end
+                else 
+                  send(message, "#{username} belom terdaftar, gak bisa dijorokin")
+                end  
+              else 
+                send(message, 'Gak bisa jorokin tjoy, gak ada yang main')
+              end 
+            else 
+              wrong_room(message)
+            end 
+
+          when /^\/players_info/
+            players_info_res = '';
+            return unless message.from.username == "azamuddin91"
+            if in_private?(message)
+              Lycantulul::RegisteredPlayer.all.each do |p| 
+                players_info_res << "#{p.username} - #{p.user_id}"
+                players_info_res << "\n"
+              end 
+              send(message, players_info_res)
+            else 
+              wrong_room(message)
+            end
+
+
           when /^\/ikutan(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
@@ -310,6 +384,45 @@ module Lycantulul
             else
               wrong_room(message)
             end
+
+          when /^\/panggil_yang_belum_ikut(@lycantoban_bot)?/ 
+            if in_group?(message) 
+              if game = check_game(message)
+                summon_gak_ikut(game)
+              else 
+                summon_sip_players(game)
+              end
+            else 
+              wrong_room(message)
+            end
+
+          when /^\/panggil_aerbee(@lycantoban_bot)?/ 
+            game = check_game(message)
+            summon_aerbee(game)
+
+          when /^\/panggil_players(@lycantoban_bot)?/ 
+            panggilan = ALL_PLAYERS_USERNAME.map{ |tc| "@#{tc}" }.join(' ')
+            send(message, 'Hoyyy ' + panggilan)
+
+          when /^\/rumor(@lycantoban_bot)?/ 
+            if in_group?(message)
+              if game = check_game(message) 
+                if game.waiting? 
+                  send(message, 'Belum juga mulai udah rumor rumor aja, /mulai_main dulu tjoy', reply: true)
+                else 
+                  if player = game.players.with_id(game.roumoree_id) rescue nil
+                    send(message, 'Menurut rumor dari emak-emak komplek, serigalanya adalah ' + player.full_name, reply: true)
+                  else 
+                    send(message, 'Belum ada rumor apa-apa dari emak-emak', reply: true)
+                  end 
+                end 
+              else 
+                send(message, 'Rumor apaan sih orang gak ada yang lagi main, /bikin_baru dulu', reply: true)
+              end 
+            else 
+              wrong_room(message)
+            end 
+
           when /^\/panggil_yang_idup(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
@@ -320,6 +433,7 @@ module Lycantulul
             else
               wrong_room(message)
             end
+
           when /^\/panggil_yang_belom_voting(@lycantoban_bot)?/
             if in_group?(message)
               if game = check_game(message)
@@ -365,9 +479,11 @@ module Lycantulul
             else
               wrong_room(message)
             end
+
           when /^\/ilangin_keyboard(@lycantoban_bot)?/
             keyboard = Telegram::Bot::Types::ReplyKeyboardHide.new(hide_keyboard: true, selective: true)
             send(message, 'OK', reply: in_group?(message), keyboard: keyboard)
+
           when /^\/statistik(@lycantoban_bot)?/
             if in_private?(message)
               if check_player(message)
@@ -378,13 +494,23 @@ module Lycantulul
             else
               send_to_player(message.chat.id, Lycantulul::Group.get(message).statistics, parse_mode: 'HTML')
             end
+
           when /^\/stats/
-            return unless message.from.username == 'araishikeiwai'
+            #return unless message.from.username == 'azamuddin91'
             (stat = Lycantulul::Statistics.get_stats(message.text)) && send(message, stat, html: true)
+
           when /^\/kill/
-            return unless message.from.username == 'araishikeiwai'
+            return unless message.from.username == 'azamuddin91'
             group_id = message.text.split[1]&.to_i
             Lycantulul::Game.running.find_by(group_id: group_id)&.finish(stats: false)
+
+          when /^\/group_id(@lycantoban_bot)?/
+            return unless message.from.username == 'azamuddin91'
+            if game = check_game(message)
+              send(message, "group_id " + game.group_id.to_s)
+            else 
+            end
+
           else
             if in_private?(message)
               if game = check_werewolf_in_game(message)
@@ -617,7 +743,7 @@ module Lycantulul
         if dead_werewolf
           send_to_player(dead_werewolf.user_id, "MPOZ. Sial kan bunuh #{game.get_role(Lycantulul::Game::SILVER_BULLET)}, lu dipukuli berkali-kali sama petarung, Mati bareng deh")
           #send_to_player(group_chat_id, "#{victim_full_name} yang ternyata mengidap ebola ikut menjangkiti seekor serigala #{dead_werewolf.full_name} yang pada akhirnya meninggal dunia. Mari berantas ebola dari muka bumi ini secepatnya!")
-          send_to_player(group_chat_id, "#{victim_full_name} yang ternyata adalah petarung handal, sebelum dibunuh bertarung dengan serigala, sehingga seekor serigala #{dead_werewolf.full_name} yang pada akhirnya meninggal dunia juga karena dipukuli berkali-kali. Mari berlatih bela diri agar bisa bertarung melawan serigala.
+          send_to_player(group_chat_id, "#{victim_full_name} yang ternyata adalah petarung handal, sebelum dibunuh bertarung dengan serigala, sehingga seekor serigala #{dead_werewolf.full_name} yang pada akhirnya meninggal dunia juga karena dipukuli berkali-kali. Mari berlatih bela diri agar bisa bertarung melawan serigala.")
         end
 
         unless dead_homeless.empty?
@@ -849,6 +975,31 @@ module Lycantulul
       elsif in_group?(message)
         send(message, 'PM mz mb! @lycantoban_bot', reply: true)
       end
+    end
+
+    def summon_gak_ikut(game)
+
+      udah_ikutan_username = game.players.map(&:username).compact
+
+      to_call_gak_ikut = ALL_PLAYERS_USERNAME - udah_ikutan_username
+
+      message = 'Hoy ' + to_call_gak_ikut.map{ |tc| "@#{tc}" }.join(' ')
+
+      send_to_player(game.group_id, message)
+
+      to_call = []
+
+    end 
+
+    def summon_sip_players(game) 
+      message = 'Hoy ' + ALL_PLAYERS_USERNAME.map{ |tc| "@#{tc}" }.join(' ')
+
+      send_to_player(game.group_id, message)
+    end 
+
+    def summon_aerbee(game)
+      message = 'Hoy @aerbee @aerbee @aerbee'
+      send_to_player(game.group_id, message)
     end
 
     def summon(game, who)

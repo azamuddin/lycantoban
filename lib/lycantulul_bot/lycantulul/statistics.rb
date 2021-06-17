@@ -70,7 +70,16 @@ module Lycantulul
         Lycantulul::Group.all.sort_by(&:game).reverse.each do |x|
           stats << "#{"%3d" % x.game} #{x.title.gsub(/[<>]/, '') rescue ''}"
         end
-      end
+
+      else 
+        username = stat.split[1]&.to_s
+        if player = Lycantulul::RegisteredPlayer.find_by(username: username)
+          stats << player.statistics
+        else 
+          stats << "Player gak ditemukan tjoy"
+        end 
+      end 
+
 
       stats = stats.join("\n")[0...4000]
       stats
